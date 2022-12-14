@@ -56,6 +56,10 @@ def update_nearest():
 @app.route('/')
 def get_index():
     return render_template('index.html')
+    
+@app.route('/reverse')
+def get_reverse():
+    return render_template('reverse.html')
 
 
 @app.route("/favicon.ico")
@@ -67,6 +71,16 @@ def send_favicon():
 def send_static(path):
     return send_from_directory("static/assets", path)
 
+@app.route('/today_word')
+def get_today_word():
+    day = 257
+    return app.secrets[day]
+
+@app.route('/count/similarity/<string:word>')
+def get_similarity_with_answer(word: str):
+    day = 257
+    sim = word2vec.similarity(app.secrets[day], word)
+    return jsonify({ "sim": sim, "word": word })
 
 @app.route('/guess/<int:day>/<string:word>')
 def get_guess(day: int, word: str):
